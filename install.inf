@@ -1,0 +1,11 @@
+[info]
+title=Git Blame
+desc=Quickly show git blame information.
+type=cudatext-plugin
+subdir=cuda_git_blame
+homepage=https://github.com/ThaiDat/cuda_git_blame
+
+[item10]
+section=commands
+caption=Git Blame\Blame current line
+method=do_blame_current_line
