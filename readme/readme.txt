@@ -1,8 +1,8 @@
 Plugin for CudaText. 
 
-Give git blame information.
+Offer following functions
 
-- Blame current line
+- Blame current line: Give basic blame information of current line (committer, commit date, summary,...).
 
 Author: ThaiDat
 
