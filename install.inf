@@ -9,3 +9,8 @@ homepage=https://github.com/ThaiDat/cuda_git_blame
 section=commands
 caption=Git Blame\Blame current line
 method=do_blame_current_line
+
+[item11]
+section=commands
+caption=Git Blame\Blame analyze file
+method=do_blame_analyze

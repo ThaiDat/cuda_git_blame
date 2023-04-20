@@ -1,2 +1,6 @@
-﻿1.0.0 2023-04-20
+﻿1.1.0 2023-04-20
++ Add command Blame analyze file
+- Fix spacing in blame one line result
+
+1.0.0 2023-04-20
 init 

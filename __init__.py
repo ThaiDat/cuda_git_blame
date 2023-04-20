@@ -2,6 +2,7 @@ import cudatext as app
 from cudatext import ed
 from cudax_lib import get_translation
 from cuda_git_blame.gitutils import git_blame
+from cuda_git_blame.parser import parse_blame_one_line, parse_blame_analysis
 
 
 _ = get_translation(__file__)  # I18N
@@ -20,7 +21,8 @@ class Command:
         if clear:
             app.app_log(app.LOG_CLEAR, '', panel=app.LOG_PANEL_OUTPUT)
         for msg in msgs:
-            app.app_log(app.LOG_ADD, msg, panel=app.LOG_PANEL_OUTPUT)
+            app.app_log(app.LOG_ADD, _(msg), panel=app.LOG_PANEL_OUTPUT)
+    
     
     def do_blame_current_line(self):
         '''
@@ -36,7 +38,18 @@ class Command:
         line = y0 + 1
         # call git blame
         fn = ed.get_filename()
-        result = git_blame(fn, line)
+        result = parse_blame_one_line(*git_blame(fn, line))
         # print result to output panel
-        self.log_output(result)
+        self.log_output([f'{fn} : {line}'])
+        self.log_output(result, clear=False)
+        app.app_proc(app.PROC_BOTTOMPANEL_ACTIVATE, 'Output')
+        
+    def do_blame_analyze(self):
+        '''
+        Handle Blame Analyze command
+        '''
+        fn = ed.get_filename()
+        result = parse_blame_analysis(*git_blame(fn))
+        self.log_output([fn])
+        self.log_output(result, clear=False)
         app.app_proc(app.PROC_BOTTOMPANEL_ACTIVATE, 'Output')
