@@ -67,7 +67,8 @@ def parse_blame_analysis(error, msg_bytes):
         _, summary = __split_by_first_space(lines[i+9])
         # count analysis
         total_cnt += 1
-        committer = committer.decode('utf-8'); committer_mail = committer_mail.decode('utf-8');
+        committer = committer.decode('utf-8')
+        committer_mail = committer_mail.decode('utf-8');
         if (committer, committer_mail) in count_analysis:
             count_analysis[(committer, committer_mail)] += 1
         else:
@@ -82,15 +83,15 @@ def parse_blame_analysis(error, msg_bytes):
         i += 13 if lines[i+10].startswith(b'previous ') else 12
     # post process
     count_analysis = sorted(count_analysis.items(), key=lambda x: x[1], reverse=True)
+    oldest_commit = datetime.fromtimestamp(oldest_commit)
+    oldest_diff = datetime.now() - oldest_commit
+    newest_commit = datetime.fromtimestamp(newest_commit)
+    newest_diff = datetime.now() - newest_commit
     # construct result
     result = list()      
     result.append(f'On total {total_cnt} lines')
     for ident, cnt in count_analysis:
         result.append('- {}: {} ({:.2f}%)'.format(ident, cnt, cnt/total_cnt * 100))
-    oldest_commit = datetime.fromtimestamp(oldest_commit)
-    oldest_diff = datetime.now() - oldest_commit
     result.append(''.join(['Oldest commit: ', oldest_commit.strftime('%m/%d/%Y'), ' (', str(oldest_diff.days), ' days)']))
-    newest_commit = datetime.fromtimestamp(newest_commit)
-    newest_diff = datetime.now() - newest_commit
     result.append(''.join(['Newest commit: ', newest_commit.strftime('%m/%d/%Y'), ' (', str(newest_diff.days), ' days)']))
     return result
