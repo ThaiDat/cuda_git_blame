@@ -21,7 +21,7 @@ class Command:
         if clear:
             app.app_log(app.LOG_CLEAR, '', panel=app.LOG_PANEL_OUTPUT)
         for msg in msgs:
-            app.app_log(app.LOG_ADD, _(msg), panel=app.LOG_PANEL_OUTPUT)
+            app.app_log(app.LOG_ADD, msg, panel=app.LOG_PANEL_OUTPUT)
     
     
     def do_blame_current_line(self):
