@@ -14,7 +14,7 @@ def git_blame(path, line=None):
     if os.name == 'nt':
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-    params = ['git', 'blame', os.path.basename(path), '--line-porcelain']
+    params = ['git', 'blame', os.path.basename(path), '--line-porcelain', '--root']
     if line is not None:
         params.extend(['-L', f'{line},{line}'])
     result = subprocess.run(params, stdout=subprocess.PIPE, stderr=subprocess.PIPE, startupinfo=startupinfo, cwd=os.path.dirname(path))
