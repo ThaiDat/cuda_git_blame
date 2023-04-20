@@ -73,7 +73,6 @@ def parse_blame_analysis(error, msg_bytes):
         else:
             count_analysis[(committer, committer_mail)] = 1
         # time anlysis
-        print(lines[i:i+12])
         committer_time = int(committer_time)
         if committer_time < oldest_commit:
             oldest_commit = committer_time
