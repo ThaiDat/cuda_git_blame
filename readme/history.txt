@@ -1,4 +1,9 @@
-﻿1.1.0 2023-04-20
+﻿1.1.1 2023-04-20
+* Remove unneccessary translator call
+- Fix #4 Linux compatibility
+- Fix #6 Handle boundary commit in git blame command
+
+1.1.0 2023-04-20
 + Add command Blame analyze file
 - Fix spacing in blame one line result
 
