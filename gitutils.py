@@ -10,8 +10,10 @@ def git_blame(path, line=None):
     return tuple(return code, return message)
     '''
     # startupinfo to prevent external console window appear
-    startupinfo = subprocess.STARTUPINFO()
-    startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+    startupinfo = None
+    if os.name == 'nt':
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
     params = ['git', 'blame', os.path.basename(path), '--line-porcelain']
     if line is not None:
         params.extend(['-L', f'{line},{line}'])
