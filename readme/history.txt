@@ -1,4 +1,7 @@
-﻿1.1.1 2023-04-20
+﻿1.1.2 2023-04-21
+* #10 Remove quote in command result for clarity
+
+1.1.1 2023-04-20
 * Remove unneccessary translator call
 - Fix #4 Linux compatibility
 - Fix #6 Handle boundary commit in git blame command
