@@ -1,6 +1,6 @@
 # cuda_git_blame
 
-Plugin for CudaText. 
+Plugin for CudaText.
 
 Offer following functions
 
