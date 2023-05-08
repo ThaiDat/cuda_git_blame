@@ -89,9 +89,11 @@ def parse_blame_analysis(error, msg_bytes):
     newest_diff = datetime.now() - newest_commit
     # construct result
     result = list()      
-    result.append(f'On total {total_cnt} lines')
+    result.append('On total {total_cnt} lines'.format(total_cnt=total_cnt))
     for (name, email), cnt in count_analysis:
         result.append('- {} {}: {} ({:.2f}%)'.format(name, email, cnt, cnt/total_cnt * 100))
-    result.append(''.join(['Oldest commit: ', oldest_commit.strftime('%m/%d/%Y'), ' (', str(oldest_diff.days), ' days)']))
-    result.append(''.join(['Newest commit: ', newest_commit.strftime('%m/%d/%Y'), ' (', str(newest_diff.days), ' days)']))
+    result.extend([
+        'Oldest commit: {oldest:%m/%d/%Y} ({days_to_oldest} days)'.format(oldest=oldest_commit, days_to_oldest=oldest_diff.days),
+        'Oldest commit: {newest:%m/%d/%Y} ({days_to_newest} days)'.format(newest=newest_commit, days_to_newest=newest_diff.days)
+    ])
     return result

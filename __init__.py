@@ -40,7 +40,7 @@ class Command:
         fn = ed.get_filename()
         result = parse_blame_one_line(*git_blame(fn, line))
         # print result to output panel
-        self.log_output([f'{fn} : {line}'])
+        self.log_output(['{file_name} : {line}'.format(file_name=fn, line=line)])
         self.log_output(result, clear=False)
         app.app_proc(app.PROC_BOTTOMPANEL_ACTIVATE, 'Output')
         
