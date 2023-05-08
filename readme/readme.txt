@@ -1,4 +1,4 @@
-Plugin for CudaText. 
+Plugin for CudaText.
 
 Offer following functions
 
