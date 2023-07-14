@@ -1,7 +1,7 @@
 import cudatext as app
 from cudatext import ed
 from cudax_lib import get_translation
-from .gitutils import git_blame, git_log
+from .gitutils import git_blame, git_log, git_shortlog
 from .parser import parse_blame_one_line, parse_blame_analysis, parse_formatted_log
 from .settings import gsettings
 
@@ -58,4 +58,12 @@ class Command:
         '''
         fn = ed.get_filename()
         result = parse_formatted_log(*git_log(fn, gsettings['pretty_log_format']))
+        self.log_output([fn] + result)
+        
+    def do_see_file_history_by_commiter(self):
+        '''
+        Handle See file history by committer command
+        '''
+        fn = ed.get_filename()
+        result = parse_formatted_log(*git_shortlog(fn))
         self.log_output([fn] + result)

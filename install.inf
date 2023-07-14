@@ -19,3 +19,8 @@ method=do_blame_analyze
 section=commands
 caption=Git Blame\See file history
 method=do_see_file_history
+
+[item13]
+section=commands
+caption=Git Blame\See file history by committer
+method=do_see_file_history_by_commiter

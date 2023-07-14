@@ -15,7 +15,7 @@ def __git(params, cwd=None):
     if os.name == 'nt':
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-    result = subprocess.run(params, stdout=subprocess.PIPE, stderr=subprocess.PIPE, startupinfo=startupinfo, cwd=cwd)
+    result = subprocess.run(params, capture_output=True, startupinfo=startupinfo, cwd=cwd)
     return result.returncode, result.stdout if result.returncode == 0 else result.stderr
 
 def git_blame(path, line=None):
@@ -38,4 +38,17 @@ def git_log(path, fmt=None):
     if fmt is not None:
         params.append('--pretty=format:' + fmt)
     params.append(os.path.basename(path))
+    return __git(params, cwd=os.path.dirname(path))
+    
+    
+def git_shortlog(path):
+    '''
+    Call git shortlog command on specified file
+    '''
+    params = [
+        'git', 'shortlog', 'HEAD', '-n', '-c', '-e', '-w0,4,8',
+        '--date=format:'+gsettings['datetime_format'], 
+        '--pretty=format:%cd %s',
+        os.path.basename(path)
+    ]   
     return __git(params, cwd=os.path.dirname(path))
