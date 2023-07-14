@@ -97,3 +97,14 @@ def parse_blame_analysis(error, msg_bytes):
         'Oldest commit: {newest} ({days_to_newest} days)'.format(newest=newest_commit.strftime(setts['datetime_format']), days_to_newest=newest_diff.days)
     ])
     return result
+    
+
+def parse_formatted_log(error, msg_bytes):
+    '''
+    Parse message when git log with pretty format
+    error: error code. 0 mean success
+    msg_bytes: return message in bytes
+    return list of messages
+    '''
+    # Just decode and return because the message has already been formatted
+    return [line.decode('utf-8') for line in msg_bytes.split(b'\n')]

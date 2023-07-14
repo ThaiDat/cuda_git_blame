@@ -1,8 +1,9 @@
 import cudatext as app
 from cudatext import ed
 from cudax_lib import get_translation
-from .gitutils import git_blame
-from .parser import parse_blame_one_line, parse_blame_analysis
+from .gitutils import git_blame, git_log
+from .parser import parse_blame_one_line, parse_blame_analysis, parse_formatted_log
+from .settings import setts
 
 
 _ = get_translation(__file__)  # I18N
@@ -12,7 +13,7 @@ class Command:
     def __init__(self):
         pass
 
-    def log_output(self, msgs, clear=True):
+    def log_output(self, msgs, clear=True, show=True):
         '''
         Log messages to output panel
         msgs: list of messages
@@ -22,7 +23,8 @@ class Command:
             app.app_log(app.LOG_CLEAR, '', panel=app.LOG_PANEL_OUTPUT)
         for msg in msgs:
             app.app_log(app.LOG_ADD, msg, panel=app.LOG_PANEL_OUTPUT)
-
+        if show:
+            app.app_proc(app.PROC_BOTTOMPANEL_ACTIVATE, 'Output')
 
     def do_blame_current_line(self):
         '''
@@ -40,9 +42,7 @@ class Command:
         fn = ed.get_filename()
         result = parse_blame_one_line(*git_blame(fn, line))
         # print result to output panel
-        self.log_output(['{file_name} : {line}'.format(file_name=fn, line=line)])
-        self.log_output(result, clear=False)
-        app.app_proc(app.PROC_BOTTOMPANEL_ACTIVATE, 'Output')
+        self.log_output(['{file_name} : {line}'.format(file_name=fn, line=line)] + result)
 
     def do_blame_analyze(self):
         '''
@@ -50,6 +50,12 @@ class Command:
         '''
         fn = ed.get_filename()
         result = parse_blame_analysis(*git_blame(fn))
-        self.log_output([fn])
-        self.log_output(result, clear=False)
-        app.app_proc(app.PROC_BOTTOMPANEL_ACTIVATE, 'Output')
+        self.log_output([fn] + result)
+        
+    def do_see_file_history(self):
+        '''
+        Handle See file history command
+        '''
+        fn = ed.get_filename()
+        result = parse_formatted_log(*git_log(fn, setts['pretty_log_format']))
+        self.log_output([fn] + result)

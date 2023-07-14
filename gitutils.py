@@ -19,7 +19,7 @@ def __git(params, cwd=None):
 
 def git_blame(path, line=None):
     '''
-    Call the git blame command on specified file-line and return result
+    Call the git blame command on specified file-line
     path: file to blame
     line: line to blame
     return tuple(return code, return message)
@@ -27,4 +27,14 @@ def git_blame(path, line=None):
     params = ['git', 'blame', '--line-porcelain', '--root', os.path.basename(path)]
     if line is not None:
         params.extend(['-L', '{line},{line}'.format(line=line)])
+    return __git(params, cwd=os.path.dirname(path))
+    
+def git_log(path, fmt=None):
+    '''
+    Call git log command on specified file
+    '''
+    params = ['git', 'log']
+    if fmt is not None:
+        params.append('--pretty=format:' + fmt)
+    params.append(os.path.basename(path))
     return __git(params, cwd=os.path.dirname(path))
