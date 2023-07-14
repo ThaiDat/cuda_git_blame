@@ -1,5 +1,6 @@
 import os
 import subprocess
+from .settings import gsettings
 
 
 def __git(params, cwd=None):
@@ -33,7 +34,7 @@ def git_log(path, fmt=None):
     '''
     Call git log command on specified file
     '''
-    params = ['git', 'log', '--date=format:%m-%d-%Y']
+    params = ['git', 'log', '--date=format:'+gsettings['datetime_format']]
     if fmt is not None:
         params.append('--pretty=format:' + fmt)
     params.append(os.path.basename(path))
