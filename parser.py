@@ -96,7 +96,7 @@ def parse_blame_analysis(error, msg_bytes):
         'Newest commit: {newest} ({days_to_newest} days)'.format(newest=newest_commit.strftime(gsettings['datetime_format']), days_to_newest=newest_diff.days)
     ])
     return result
-    
+
 
 def parse_formatted_log(error, msg_bytes):
     '''

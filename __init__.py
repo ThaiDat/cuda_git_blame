@@ -51,7 +51,7 @@ class Command:
         fn = ed.get_filename()
         result = parse_blame_analysis(*git_blame(fn))
         self.log_output([fn] + result)
-        
+
     def do_see_file_history(self):
         '''
         Handle See file history command
@@ -59,7 +59,7 @@ class Command:
         fn = ed.get_filename()
         result = parse_formatted_log(*git_log(fn, gsettings['pretty_log_format']))
         self.log_output([fn] + result)
-        
+
     def do_see_file_history_by_commiter(self):
         '''
         Handle See file history by committer command

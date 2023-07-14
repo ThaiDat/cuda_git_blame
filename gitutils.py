@@ -29,7 +29,7 @@ def git_blame(path, line=None):
     if line is not None:
         params.extend(['-L', '{line},{line}'.format(line=line)])
     return __git(params, cwd=os.path.dirname(path))
-    
+
 def git_log(path, fmt=None):
     '''
     Call git log command on specified file
@@ -39,16 +39,16 @@ def git_log(path, fmt=None):
         params.append('--pretty=format:' + fmt)
     params.append(os.path.basename(path))
     return __git(params, cwd=os.path.dirname(path))
-    
-    
+
+
 def git_shortlog(path):
     '''
     Call git shortlog command on specified file
     '''
     params = [
         'git', 'shortlog', 'HEAD', '-n', '-c', '-e', '-w0,4,8',
-        '--date=format:'+gsettings['datetime_format'], 
+        '--date=format:'+gsettings['datetime_format'],
         '--pretty=format:%cd %s',
         os.path.basename(path)
-    ]   
+    ]
     return __git(params, cwd=os.path.dirname(path))
