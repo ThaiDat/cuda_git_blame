@@ -3,7 +3,7 @@ from cudatext import ed
 from cudax_lib import get_translation
 from .gitutils import git_blame, git_log
 from .parser import parse_blame_one_line, parse_blame_analysis, parse_formatted_log
-from .settings import setts
+from .settings import gsettings
 
 
 _ = get_translation(__file__)  # I18N
@@ -57,5 +57,5 @@ class Command:
         Handle See file history command
         '''
         fn = ed.get_filename()
-        result = parse_formatted_log(*git_log(fn, setts['pretty_log_format']))
+        result = parse_formatted_log(*git_log(fn, gsettings['pretty_log_format']))
         self.log_output([fn] + result)
