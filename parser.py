@@ -25,7 +25,6 @@ def parse_blame_one_line(error, msg_bytes):
     _, committer = __split_by_first_space(lines[5])
     _, committer_mail = __split_by_first_space(lines[6])
     _, committer_time = __split_by_first_space(lines[7])
-    _, committer_tz = __split_by_first_space(lines[8])
     _, summary = __split_by_first_space(lines[9])
 
     # process datetime
@@ -35,7 +34,7 @@ def parse_blame_one_line(error, msg_bytes):
     return [
         'committer     : ' + committer.decode('utf-8'),
         'committer-mail: ' + committer_mail.decode('utf-8'),
-        'committer-time: ' + committer_time.strftime(gsettings['datetime_format']) + committer_tz.decode('utf-8') + ' (' + str(datediff.days) + ' days)',
+        'committer-time: ' + committer_time.strftime(gsettings['datetime_format']) + ' (' + str(datediff.days) + ' days)',
         'summary       : ' + summary.decode('utf-8')
     ]
 

@@ -33,7 +33,7 @@ def git_log(path, fmt=None):
     '''
     Call git log command on specified file
     '''
-    params = ['git', 'log']
+    params = ['git', 'log', '--date=format:%m-%d-%Y']
     if fmt is not None:
         params.append('--pretty=format:' + fmt)
     params.append(os.path.basename(path))
