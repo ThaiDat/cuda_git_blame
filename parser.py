@@ -93,7 +93,7 @@ def parse_blame_analysis(error, msg_bytes):
         result.append('- {} {}: {} ({:.2f}%)'.format(name, email, cnt, cnt/total_cnt * 100))
     result.extend([
         'Oldest commit: {oldest} ({days_to_oldest} days)'.format(oldest=oldest_commit.strftime(gsettings['datetime_format']), days_to_oldest=oldest_diff.days),
-        'Oldest commit: {newest} ({days_to_newest} days)'.format(newest=newest_commit.strftime(gsettings['datetime_format']), days_to_newest=newest_diff.days)
+        'Newest commit: {newest} ({days_to_newest} days)'.format(newest=newest_commit.strftime(gsettings['datetime_format']), days_to_newest=newest_diff.days)
     ])
     return result
     
