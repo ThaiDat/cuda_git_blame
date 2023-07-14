@@ -55,8 +55,8 @@ def parse_blame_analysis(error, msg_bytes):
     i = 0
     # construct analysis on the go
     count_analysis = dict()
-    oldest_commit = 999_999_999_999
-    newest_commit = -999_999_999_999
+    oldest_commit = 0x7FFF_FFFF_FFFF_FFFF
+    newest_commit = -0x7FFF_FFFF_FFFF_FFFF
     total_cnt = 0
 
     while i + 11 < len(lines):
