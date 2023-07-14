@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from .settings import gsettings
 
 def __split_by_first_space(txt):
     '''
@@ -25,7 +25,6 @@ def parse_blame_one_line(error, msg_bytes):
     _, committer = __split_by_first_space(lines[5])
     _, committer_mail = __split_by_first_space(lines[6])
     _, committer_time = __split_by_first_space(lines[7])
-    _, committer_tz = __split_by_first_space(lines[8])
     _, summary = __split_by_first_space(lines[9])
 
     # process datetime
@@ -35,7 +34,7 @@ def parse_blame_one_line(error, msg_bytes):
     return [
         'committer     : ' + committer.decode('utf-8'),
         'committer-mail: ' + committer_mail.decode('utf-8'),
-        'committer-time: ' + committer_time.strftime('%m/%d/%Y') + committer_tz.decode('utf-8') + ' (' + str(datediff.days) + ' days)',
+        'committer-time: ' + committer_time.strftime(gsettings['datetime_format']) + ' (' + str(datediff.days) + ' days)',
         'summary       : ' + summary.decode('utf-8')
     ]
 
@@ -55,8 +54,8 @@ def parse_blame_analysis(error, msg_bytes):
     i = 0
     # construct analysis on the go
     count_analysis = dict()
-    oldest_commit = 999_999_999_999
-    newest_commit = -999_999_999_999
+    oldest_commit = 0x7FFF_FFFF_FFFF_FFFF
+    newest_commit = -0x7FFF_FFFF_FFFF_FFFF
     total_cnt = 0
 
     while i + 11 < len(lines):
@@ -93,7 +92,18 @@ def parse_blame_analysis(error, msg_bytes):
     for (name, email), cnt in count_analysis:
         result.append('- {} {}: {} ({:.2f}%)'.format(name, email, cnt, cnt/total_cnt * 100))
     result.extend([
-        'Oldest commit: {oldest:%m/%d/%Y} ({days_to_oldest} days)'.format(oldest=oldest_commit, days_to_oldest=oldest_diff.days),
-        'Oldest commit: {newest:%m/%d/%Y} ({days_to_newest} days)'.format(newest=newest_commit, days_to_newest=newest_diff.days)
+        'Oldest commit: {oldest} ({days_to_oldest} days)'.format(oldest=oldest_commit.strftime(gsettings['datetime_format']), days_to_oldest=oldest_diff.days),
+        'Newest commit: {newest} ({days_to_newest} days)'.format(newest=newest_commit.strftime(gsettings['datetime_format']), days_to_newest=newest_diff.days)
     ])
     return result
+
+
+def parse_formatted_log(error, msg_bytes):
+    '''
+    Parse message when git log with pretty format
+    error: error code. 0 mean success
+    msg_bytes: return message in bytes
+    return list of messages
+    '''
+    # Just decode and return because the message has already been formatted
+    return [line.decode('utf-8') for line in msg_bytes.split(b'\n')]
