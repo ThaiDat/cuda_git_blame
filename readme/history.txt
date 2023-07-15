@@ -1,4 +1,7 @@
-﻿1.2.0 2023-07-14
+﻿1.2.1 2023-07-15
+* Align "See file history" command output
+
+1.2.0 2023-07-14
 + #15 New command: Show file history
 + New command: Show file history by committer
 * Change default datetime format to %m-%d-%Y
