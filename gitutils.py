@@ -33,6 +33,9 @@ def git_blame(path, line=None):
 def git_log(path, fmt=None):
     '''
     Call git log command on specified file
+    path: file to blame
+    fmt: pretty format
+    return tuple(return code, return message)
     '''
     params = ['git', 'log', '--date=format:'+gsettings['datetime_format']]
     if fmt is not None:
@@ -44,6 +47,8 @@ def git_log(path, fmt=None):
 def git_shortlog(path):
     '''
     Call git shortlog command on specified file
+    path: file to blame
+    return tuple(return code, return message)
     '''
     params = [
         'git', 'shortlog', 'HEAD', '-n', '-c', '-e', '-w0,4,8',
@@ -51,4 +56,15 @@ def git_shortlog(path):
         '--pretty=format:%cd %s',
         os.path.basename(path)
     ]
+    return __git(params, cwd=os.path.dirname(path))
+
+
+def git_show(path, commit):
+    '''
+    Show file content at specified commit
+    path: file to blame
+    commit: specified commit hash
+    return tuple(return code, return message)
+    '''
+    params = ['git', 'show', commit+':'+os.path.basename(path)]
     return __git(params, cwd=os.path.dirname(path))
