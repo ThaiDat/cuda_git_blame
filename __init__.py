@@ -94,5 +94,6 @@ class Command:
         ed.set_text_all(file_content.decode('utf-8'))
         ed.set_prop(app.PROP_RO, True)
         ed.set_prop(app.PROP_LEXER_FILE, cur_lexer)
+        ed.set_prop(app.PROP_MODIFIED, False)
         ed.set_prop(app.PROP_TAB_TITLE, '({time}) {title}'.format(time=times[idx], title=cur_title))
         ed.set_prop(app.PROP_TAB_TITLE_REASON, 'u')
