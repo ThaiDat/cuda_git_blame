@@ -1,7 +1,7 @@
 import cudatext as app
 from cudatext import ed
 from cudax_lib import get_translation
-from .gitutils import git_blame, git_log, git_shortlog
+from .gitutils import git_blame, git_log, git_shortlog, git_show
 from .parser import parse_blame_one_line, parse_blame_analysis, parse_formatted_log
 from .settings import gsettings
 
@@ -67,3 +67,31 @@ class Command:
         fn = ed.get_filename()
         result = parse_formatted_log(*git_shortlog(fn))
         self.log_output([fn] + result)
+
+    def do_view_file_content_past(self):
+        '''
+        View file content in the past command
+        '''
+        fn = ed.get_filename()
+        sep = r'\[>.<|]/'
+        pretty_format = sep.join(['%H','%cd','%s'])
+        hashes = []; times = []; msgs = []
+        for line in parse_formatted_log(*git_log(fn, pretty_format)):
+            h, t, m = line.split(sep)
+            hashes.append(h)
+            times.append(t)
+            msgs.append(t + ': ' + m)
+        # Open dialog to let usert choose version
+        idx = app.dlg_menu(app.DMENU_LIST, items=msgs, caption='View file content in history', clip=app.CLIP_RIGHT)
+        if idx is None:
+            return
+        # Open a new read-only tab to show file content in the past
+        cur_lexer = ed.get_prop(app.PROP_LEXER_FILE)
+        cur_title = ed.get_prop(app.PROP_TAB_TITLE)
+        commit_time = msgs[idx].split()
+        app.file_open('', options='/nohistory/noloadundo/nolexerdetect/donear')
+        git_err, file_content = git_show(fn, hashes[idx])
+        ed.set_text_all(file_content.decode('utf-8'))
+        ed.set_prop(app.PROP_RO, True)
+        ed.set_prop(app.PROP_LEXER_FILE, cur_lexer)
+        ed.set_prop(app.PROP_TAB_TITLE, '({time}) {title}'.format(time=times[idx], title=cur_title))
