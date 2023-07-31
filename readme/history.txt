@@ -1,4 +1,7 @@
-﻿1.2.1 2023-07-15
+﻿1.3.0 2023-07-31
++ New command: View file content in history
+
+1.2.1 2023-07-15
 * Align "See file history" command output
 
 1.2.0 2023-07-14
