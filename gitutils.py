@@ -66,5 +66,6 @@ def git_show(path, commit):
     commit: specified commit hash
     return tuple(return code, return message)
     '''
-    params = ['git', 'show', commit+':'+os.path.basename(path)]
+    # git show require an explicit path after :
+    params = ['git', 'show', commit+':./'+os.path.basename(path)]
     return __git(params, cwd=os.path.dirname(path))
