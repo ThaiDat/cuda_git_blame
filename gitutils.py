@@ -48,6 +48,7 @@ def git_shortlog(path):
     '''
     Call git shortlog command on specified file
     path: file to blame
+    return tuple(return code, return message)
     '''
     params = [
         'git', 'shortlog', 'HEAD', '-n', '-c', '-e', '-w0,4,8',
@@ -56,3 +57,13 @@ def git_shortlog(path):
         os.path.basename(path)
     ]
     return __git(params, cwd=os.path.dirname(path))
+
+
+def git_show(path, commit):
+    '''
+    Show file content at specified commit
+    path: file to blame
+    commit: specified commit hash
+    return tuple(return code, return message)
+    '''
+    pass
