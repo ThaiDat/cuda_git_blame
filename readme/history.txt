@@ -1,4 +1,8 @@
-﻿1.3.0 2023-07-31
+﻿1.4.0 2023-12-24
++ Allow modify datetime format via config file
+* Format the output of Blame Analyze File
+
+1.3.0 2023-07-31
 + New command: View file content in history
 
 1.2.1 2023-07-15
