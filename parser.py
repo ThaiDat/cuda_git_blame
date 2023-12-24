@@ -62,12 +62,12 @@ def parse_blame_analysis(error, msg_bytes):
         _, committer = __split_by_first_space(lines[i+5])
         _, committer_mail = __split_by_first_space(lines[i+6])
         _, committer_time = __split_by_first_space(lines[i+7])
-        _, committer_tz = __split_by_first_space(lines[i+8])
         _, summary = __split_by_first_space(lines[i+9])
+        
         # count analysis
         total_cnt += 1
         committer = committer.decode('utf-8')
-        committer_mail = committer_mail.decode('utf-8');
+        committer_mail = committer_mail[1:-1].decode('utf-8');
         if (committer, committer_mail) in count_analysis:
             count_analysis[(committer, committer_mail)] += 1
         else:
@@ -90,7 +90,7 @@ def parse_blame_analysis(error, msg_bytes):
     result = list()
     result.append('On total {total_cnt} lines'.format(total_cnt=total_cnt))
     for (name, email), cnt in count_analysis:
-        result.append('- {} {}: {} ({:.2f}%)'.format(name, email, cnt, cnt/total_cnt * 100))
+        result.append('- {:>17s} <{:^30s}>: {:5d} ({:>6.2%})'.format(name, email, cnt, cnt/total_cnt))
     result.extend([
         'Oldest commit: {oldest} ({days_to_oldest} days)'.format(oldest=oldest_commit.strftime(gsettings['datetime_format']), days_to_oldest=oldest_diff.days),
         'Newest commit: {newest} ({days_to_newest} days)'.format(newest=newest_commit.strftime(gsettings['datetime_format']), days_to_newest=newest_diff.days)
