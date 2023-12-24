@@ -29,3 +29,9 @@ method=do_see_file_history_by_commiter
 section=commands
 caption=Git Blame\View file content in history
 method=do_view_file_content_past
+
+[item100]
+section=commands
+caption=Git Blame\Config
+method=do_config
+menu=o

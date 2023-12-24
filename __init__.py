@@ -1,17 +1,20 @@
+import os
 import cudatext as app
 from cudatext import ed
 from cudax_lib import get_translation
 from .gitutils import git_blame, git_log, git_shortlog, git_show
 from .parser import parse_blame_one_line, parse_blame_analysis, parse_formatted_log
-from .settings import gsettings
+from .settings import gsettings, load_ops, save_ops
 
 
 _ = get_translation(__file__)  # I18N
 
+FN_CONFIG = os.path.join(app.app_path(app.APP_DIR_SETTINGS), 'cuda_git_blame.ini')
+
 
 class Command:
     def __init__(self):
-        pass
+        load_ops(FN_CONFIG)
 
     def log_output(self, msgs, clear=True, show=True):
         '''
@@ -25,6 +28,13 @@ class Command:
             app.app_log(app.LOG_ADD, msg, panel=app.LOG_PANEL_OUTPUT)
         if show:
             app.app_proc(app.PROC_BOTTOMPANEL_ACTIVATE, 'Output')
+
+    def do_config(self):
+        '''
+        Handle command Config
+        '''
+        save_ops(FN_CONFIG)
+        app.file_open(FN_CONFIG)
 
     def do_blame_current_line(self):
         '''
