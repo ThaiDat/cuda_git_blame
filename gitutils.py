@@ -51,7 +51,7 @@ def git_shortlog(path):
     return tuple(return code, return message)
     '''
     params = [
-        'git', 'shortlog', 'HEAD', '-n', '-c', '-e', '-w0,4,8',
+        'git', 'shortlog', 'HEAD', '-n', '-c', '-e', '-w0,4,8', '--reverse',
         '--date=format:'+gsettings['datetime_format'],
         '--pretty=format:%cd %s',
         os.path.basename(path)
