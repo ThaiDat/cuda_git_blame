@@ -44,12 +44,17 @@ class Command:
         carets = ed.get_carets()
         if len(carets) != 1:
             app.msg_status(_('Git Blame: Multiple carets not supported'))
+            return
         x0, y0, x1, y1 = carets[0]
         if y1 >= 0 and y1 != y0:
             app.msg_status(_('Git Blame: Multiple lines not supported'))
+            return
         line = y0 + 1
         # call git blame
         fn = ed.get_filename()
+        if len(fn) == 0:
+            app.msg_status(_('Git Blame: Not a valid file'))
+            return
         result = parse_blame_one_line(*git_blame(fn, line))
         # print result to output panel
         self.log_output(['{file_name} : {line}'.format(file_name=fn, line=line)] + result)
@@ -59,6 +64,9 @@ class Command:
         Handle Blame Analyze command
         '''
         fn = ed.get_filename()
+        if len(fn) == 0:
+            app.msg_status(_('Git Blame: Not a valid file'))
+            return
         result = parse_blame_analysis(*git_blame(fn))
         self.log_output([fn] + result)
 
@@ -67,6 +75,9 @@ class Command:
         Handle See file history command
         '''
         fn = ed.get_filename()
+        if len(fn) == 0:
+            app.msg_status(_('Git Blame: Not a valid file'))
+            return
         result = parse_formatted_log(*git_log(fn, gsettings['pretty_log_format']))
         self.log_output([fn] + result)
 
@@ -75,6 +86,9 @@ class Command:
         Handle See file history by committer command
         '''
         fn = ed.get_filename()
+        if len(fn) == 0:
+            app.msg_status(_('Git Blame: Not a valid file'))
+            return
         result = parse_formatted_log(*git_shortlog(fn))
         self.log_output([fn] + result)
 
@@ -83,6 +97,9 @@ class Command:
         View file content in the past command
         '''
         fn = ed.get_filename()
+        if len(fn) == 0:
+            app.msg_status(_('Git Blame: Not a valid file'))
+            return
         sep = r'\[>.<|]/'
         pretty_format = sep.join(['%H','%cd','%s'])
         hashes = []; times = []; msgs = []
@@ -91,7 +108,7 @@ class Command:
             hashes.append(h)
             times.append(t)
             msgs.append(t + ': ' + m)
-        # Open dialog to let usert choose version
+        # Open dialog to let user choose version
         idx = app.dlg_menu(app.DMENU_LIST, items=msgs, caption='View file content in history', clip=app.CLIP_RIGHT)
         if idx is None:
             return
