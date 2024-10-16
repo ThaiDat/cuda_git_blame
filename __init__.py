@@ -16,7 +16,7 @@ class Command:
     def __init__(self):
         load_ops(FN_CONFIG)
 
-    def log_output(self, msgs, clear=True, show=True):
+    def log_output(self, msgs, clear=True, show=True, head=None):
         '''
         Log messages to output panel
         msgs: list of messages
@@ -24,6 +24,8 @@ class Command:
         '''
         if clear:
             app.app_log(app.LOG_CLEAR, '', panel=app.LOG_PANEL_OUTPUT)
+        if head is not None:
+            app.app_log(app.LOG_ADD, head, panel=app.LOG_PANEL_OUTPUT)
         for msg in msgs:
             app.app_log(app.LOG_ADD, msg, panel=app.LOG_PANEL_OUTPUT)
         if show:
@@ -57,7 +59,7 @@ class Command:
             return
         result = parse_blame_one_line(*git_blame(fn, line))
         # print result to output panel
-        self.log_output(['{file_name} : {line}'.format(file_name=fn, line=line)] + result)
+        self.log_output(result, head='{file_name} : {line}'.format(file_name=fn, line=line))
 
     def do_blame_analyze(self):
         '''
@@ -68,7 +70,29 @@ class Command:
             app.msg_status(_('Git Blame: Not a valid file'))
             return
         result = parse_blame_analysis(*git_blame(fn))
-        self.log_output([fn] + result)
+        self.log_output(result, head=fn)
+
+    def do_see_line_history(self):
+        '''
+        Handle See line history command
+        '''
+        # get current line
+        carets = ed.get_carets()
+        if len(carets) != 1:
+            app.msg_status(_('Git Blame: Multiple carets not supported'))
+            return
+        x0, y0, x1, y1 = carets[0]
+        if y1 >= 0 and y1 != y0:
+            app.msg_status(_('Git Blame: Multiple lines not supported'))
+            return
+        line = y0 + 1
+        # get file name
+        fn = ed.get_filename()
+        if len(fn) == 0:
+            app.msg_status(_('Git Blame: Not a valid file'))
+            return
+        result = parse_formatted_log(*git_log(fn, fmt=gsettings['pretty_log_format'], line=line))
+        self.log_output(result, head='{file_name} : {line}'.format(file_name=fn, line=line))
 
     def do_see_file_history(self):
         '''
@@ -79,7 +103,7 @@ class Command:
             app.msg_status(_('Git Blame: Not a valid file'))
             return
         result = parse_formatted_log(*git_log(fn, gsettings['pretty_log_format']))
-        self.log_output([fn] + result)
+        self.log_output(result, head=fn)
 
     def do_see_file_history_by_commiter(self):
         '''
@@ -90,7 +114,7 @@ class Command:
             app.msg_status(_('Git Blame: Not a valid file'))
             return
         result = parse_formatted_log(*git_shortlog(fn))
-        self.log_output([fn] + result)
+        self.log_output(result, head=fn)
 
     def do_view_file_content_past(self):
         '''
