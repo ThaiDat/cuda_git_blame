@@ -1,4 +1,8 @@
-﻿1.5.0 2023-12-29
+﻿1.6.0 2024-10-17
+* Performance improvement
++ New command: See current line history
+
+1.5.0 2023-12-29
 * Reverse commits order in "See file history by Comitters" command output (oldest first)
 - #21 Show status bar message when users blame a new tab
 
