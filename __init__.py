@@ -70,6 +70,28 @@ class Command:
         result = parse_blame_analysis(*git_blame(fn))
         self.log_output([fn] + result)
 
+    def do_see_line_history(self):
+        '''
+        Handle See line history command
+        '''
+        # get current line
+        carets = ed.get_carets()
+        if len(carets) != 1:
+            app.msg_status(_('Git Blame: Multiple carets not supported'))
+            return
+        x0, y0, x1, y1 = carets[0]
+        if y1 >= 0 and y1 != y0:
+            app.msg_status(_('Git Blame: Multiple lines not supported'))
+            return
+        line = y0 + 1
+        # get file name
+        fn = ed.get_filename()
+        if len(fn) == 0:
+            app.msg_status(_('Git Blame: Not a valid file'))
+            return
+        result = parse_formatted_log(*git_log(fn, fmt=gsettings['pretty_log_format'], line=line))
+        self.log_output(['{file_name} : {line}'.format(file_name=fn, line=line)] + result)
+
     def do_see_file_history(self):
         '''
         Handle See file history command

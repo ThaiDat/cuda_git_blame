@@ -30,17 +30,20 @@ def git_blame(path, line=None):
         params.extend(['-L', '{line},{line}'.format(line=line)])
     return __git(params, cwd=os.path.dirname(path))
 
-def git_log(path, fmt=None):
+def git_log(path, fmt=None, line=None):
     '''
     Call git log command on specified file
     path: file to blame
     fmt: pretty format
     return tuple(return code, return message)
     '''
-    params = ['git', 'log', '--date=format:'+gsettings['datetime_format']]
+    params = ['git', 'log', '--date=format:'+gsettings['datetime_format'], '--no-patch']
     if fmt is not None:
         params.append('--pretty=format:' + fmt)
-    params.append(os.path.basename(path))
+    if line is not None:
+        params.append('-L {line},{line}:{file_name}'.format(line=line, file_name=os.path.basename(path)))
+    else:
+        params.append(os.path.basename(path))
     return __git(params, cwd=os.path.dirname(path))
 
 
